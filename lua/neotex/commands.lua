@@ -4,10 +4,10 @@ local M = {}
 
 M.compile = function()
     local file = vim.fn.expand("%:p")
-    print("File: " .. file)
     vim.fn.mkdir(config.build_dir, 'p')
 
-    local cmd = string.format("%s -output-directory=%s %s", config.latex_cmd, config.build_dir, file)
+    local cmd = { config.latex_cmd, "-output-directory=" .. confid.build_dir, file }
+
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         on_exit = function(_, code)
