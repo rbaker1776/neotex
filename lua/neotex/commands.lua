@@ -33,6 +33,7 @@ M.compile = function()
         end,
         on_exit = function(_, code)
             print("done")
+            return
             if code == 0 then
                 print("(neotex) Compilation successful.")
             else
