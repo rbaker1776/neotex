@@ -7,7 +7,7 @@ M.compile = function()
     vim.fn.mkdir(config.build_dir, 'p')
 
     local cmd = string.format("%s -output-directory=%s %s", config.latex_cmd, config.build_dir, file)
-    vim.fn.jobstart({
+    vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         on_exit = function(_, code)
             if code == 0 then
