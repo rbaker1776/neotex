@@ -11,6 +11,7 @@ M.compile = function()
     vim.fn.jobstart(cmd, {
         stdout_buffered = false,
         on_exit = function(_, code)
+            print("HELLO")
             if code == 0 then
                 print("Compilation successful.")
             else
