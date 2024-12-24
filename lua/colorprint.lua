@@ -1,43 +1,43 @@
 local M = {}
 
-function M.black(text, end)
-    end = end or '\n'
-    io.write("\27[30m" .. text .. "\27[0m" .. end)
+function M.black(text, eol)
+    eol = eol or '\n'
+    io.write("\27[30m" .. text .. "\27[0m" .. eol)
 end
 
-function M.red(text, end)
-    end = end or '\n'
-    io.write("\27[31m" .. text .. "\27[0m" .. end)
+function M.red(text, eol)
+    eol = eol or '\n'
+    io.write("\27[31m" .. text .. "\27[0m" .. eol)
 end
 
-function M.green(text, end)
-    end = end or '\n'
-    io.write("\27[32m" .. text .. "\27[0m" .. end)
+function M.green(text, eol)
+    eol = eol or '\n'
+    io.write("\27[32m" .. text .. "\27[0m" .. eol)
 end
 
-function M.yellow(text, end)
-    end = end or '\n'
-    io.write("\27[33m" .. text .. "\27[0m" .. end)
+function M.yellow(text, eol)
+    eol = eol or '\n'
+    io.write("\27[33m" .. text .. "\27[0m" .. eol)
 end
 
-function M.blue(text, end)
-    end = end or '\n'
-    io.write("\27[34m" .. text .. "\27[0m" .. end)
+function M.blue(text, eol)
+    eol = eol or '\n'
+    io.write("\27[34m" .. text .. "\27[0m" .. eol)
 end
 
-function M.purple(text, end)
-    end = end or '\n'
-    io.write("\27[35m" .. text .. "\27[0m" .. end)
+function M.purple(text, eol)
+    eol = eol or '\n'
+    io.write("\27[35m" .. text .. "\27[0m" .. eol)
 end
 
-function M.cyan(text, end)
-    end = end or '\n'
-    io.write("\27[36m" .. text .. "\27[0m" .. end)
+function M.cyan(text, eol)
+    eol = eol or '\n'
+    io.write("\27[36m" .. text .. "\27[0m" .. eol)
 end
 
-function M.gray(text, end)
-    end = end or '\n'
-    io.write("\27[37m" .. text .. "\27[0m" .. end)
+function M.gray(text, eol)
+    eol = eol or '\n'
+    io.write("\27[37m" .. text .. "\27[0m" .. eol)
 end
 
 return M
