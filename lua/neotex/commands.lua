@@ -1,4 +1,5 @@
 local config = require("neotex.config")
+local colorprint = require("colorprint")
 
 local M = {}
 
