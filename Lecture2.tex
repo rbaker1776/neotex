@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath}
+
+\title{}
+\author{Ryan Baker}
+\date{\today}
+
+\definecolor{JadeGreen}{RGB}{91,158,62}
+\lstdefinestyle{catppuccin}{
+	backgroundcolor=\color{White},
+	commentstyle=\color{Gray},
+	numberstyle=\footnotesize\ttfamily\color{Gray},
+	stringstyle=\color{JadeGreen},
+	keywordstyle=\color{BurntOrange},
+	basicstyle=\ttfamily\footnotesize\color{Black},
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=4,
+}
+\lstset{style=catppuccin}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\pagebreak
+
+\subsection*{Lecture Objectives}
+
+\section{Functions}
+
+\begin{itemize}
+	\item What is a function?
+	\begin{itemize}
+		\item In programming, a function is a reusable block of code
+		\item It (optionally) takes input and (optionally) returns an output
+	\end{itemize}
+	\item Why use functions?
+	\begin{itemize}
+		\item We often want to repeat the same behavior on different pieces of data
+		\item Rather than pasting the same code many times, we use a function
+		\begin{itemize}
+			\item Functions help to keep code maintainable and readable
+		\end{itemize}
+		\item There is a balance to strike when extracting code into functions
+		\begin{itemize}
+			\item Too few functions results in long and repetitive code
+			\item Too many functions will result in sub-optimal performance and a code base that is very hard to read \begin{itemize}
+				\item Every time a function is called a new frame needs to be pushed to the stack and we jump around the executable
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	\item How to define a function: \textbf{type name(arguments)}
+	\begin{itemize}
+		\item \textbf{type}: The return type of the function (can be \texttt{void})
+		\item \textbf{name}: The function's name
+		\item \textbf{arguments}: The input arguments to a function
+		\begin{itemize}
+			\item Specified as \textbf{type name} in a comma seperated list
+			\item \textbf{Example}: \texttt{int add(int a, int b, int c) \{...\}}
+		\end{itemize}
+		\item Together, the function's name and arguments make up the signature
+	\end{itemize}
+	\item How to call a function: \texttt{name(arguments)}
+	\begin{itemize}
+	\item \textbf{Example}: \texttt{int sum = add(1, 2, 3); // sum = 6}
+	\end{itemize}
+\end{itemize}
+
+\end{document}
