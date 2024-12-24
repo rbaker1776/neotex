@@ -4,6 +4,7 @@ local M = {}
 
 M.compile = function()
     local file = vim.fn.expand("%:p")
+    print("File: " .. file)
     vim.fn.mkdir(config.build_dir, 'p')
 
     local cmd = string.format("%s -output-directory=%s %s", config.latex_cmd, config.build_dir, file)
