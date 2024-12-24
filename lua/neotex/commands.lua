@@ -9,7 +9,7 @@ M.compile = function()
     local cmd = { config.latex_cmd, "-output-directory=" .. config.build_dir, file }
 
     vim.fn.jobstart(cmd, {
-        stdout_buffered = true,
+        stdout_buffered = false,
         on_exit = function(_, code)
             if code == 0 then
                 print("Compilation successful.")
