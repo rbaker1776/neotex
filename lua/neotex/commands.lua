@@ -1,5 +1,4 @@
 local config = require("neotex.config")
-local colorprint = require("colorprint")
 
 local M = {}
 
@@ -8,13 +7,13 @@ M.compile = function()
 
     -- ensure we are working with a LaTeX file
     if not file:match("%.tex$") then
-        colorprint.red("(neotex) Error: Current file is not a LaTeX file.")
+        print("(neotex) Error: Current file is not a LaTeX file.")
         return
     end
 
     -- validate the LaTeX command
     if not vim.fn.executable(config.latex_cmd) then
-        colorprint.red("(neotex) Error: LaTeX command '" .. config.latex_cmd .. "' is not executable.")
+        print("(neotex) Error: LaTeX command '" .. config.latex_cmd .. "' is not executable.")
         return
     end
 
@@ -29,14 +28,14 @@ M.compile = function()
         end,
         on_stderr = function(_, data)
             if data then
-                colorprint.red("(neotex) STDERR: " .. table.concat(data, '\n'))
+                print("(neotex) STDERR: " .. table.concat(data, '\n'))
             end
         end,
         on_exit = function(_, code)
             if code == 0 then
-                colorprint.green("(neotex) Compilation successful.")
+                print("(neotex) Compilation successful.")
             else
-                colorprint.red("(neotex) Error: Compilation failed.")
+                print("(neotex) Error: Compilation failed.")
             end
         end,
     })
