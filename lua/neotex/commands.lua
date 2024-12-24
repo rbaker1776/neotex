@@ -8,13 +8,13 @@ M.compile = function()
 
     -- ensure we are working with a LaTeX file
     if not file:match("%.tex$") then
-        print("(neotex) Error: Current file is not a LaTeX file.")
+        colorprint.red("(neotex) Error: Current file is not a LaTeX file.")
         return
     end
 
     -- validate the LaTeX command
     if not vim.fn.executable(config.latex_cmd) then
-        print("(neotex) Error: LaTeX command '" .. config.latex_cmd .. "' is not executable.")
+        colorprint.red("(neotex) Error: LaTeX command '" .. config.latex_cmd .. "' is not executable.")
         return
     end
 
@@ -29,14 +29,14 @@ M.compile = function()
         end,
         on_stderr = function(_, data)
             if data then
-                print("(neotex) STDERR: " .. table.concat(data, '\n'))
+                colorprint.red("(neotex) STDERR: " .. table.concat(data, '\n'))
             end
         end,
         on_exit = function(_, code)
             if code == 0 then
-                print("(neotex) Compilation successful.")
+                colorprint.green("(neotex) Compilation successful.")
             else
-                pritn("(neotex) Error: Compilation failed.")
+                colorprint.red("(neotex) Error: Compilation failed.")
             end
         end,
     })
