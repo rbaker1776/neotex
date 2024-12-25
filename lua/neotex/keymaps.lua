@@ -21,6 +21,10 @@ M.setup = function()
     keymap.set('n', '<leader>ll', function()
         commands.toggle_live_compile()
     end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
+
+    keymap.set('n', '<leader>lf', function()
+        commands.forward_search()
+    end, { noremap = true, silent = true, desc = "Jump to corresponding point in PDF" })
 end
 
 return M
