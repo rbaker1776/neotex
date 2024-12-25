@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.24)  24 DEC 2024 20:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.24)  24 DEC 2024 20:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -286,7 +286,7 @@ LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
 )
 
-! Package keyval Error: keyordstyle undefined.
+! Package keyval Error: keywrdstyle undefined.
 
 See the keyval package documentation for explanation.
 Type  H <return>  for immediate help.
