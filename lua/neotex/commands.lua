@@ -17,7 +17,7 @@ M.compile = function()
         return
     end
 
-    local cmd = { config.latex_cmd, file }
+    local cmd = { config.latex_cmd, "-interaction=nonstopmode", file }
 
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
