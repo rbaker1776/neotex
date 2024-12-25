@@ -68,12 +68,11 @@ M.open_pdf = function()
 end
 
 M.preview = function()
-    if not M.compile() then
+    local did_compile = M.compile()
+    if not did_compile then
         return
     end
-    vim.defer_fn(function()
-        M.open_pdf()
-    end, 500) -- 500ms delay to ensure PDF is written
+    M.open_pdf()
 end
 
 return M
