@@ -76,7 +76,7 @@ M.open_pdf = function(on_complete)
     -- ensure target PDF exists
     if utils.file_exists(pdf_file) then
         logger.info("Opening " .. pdf_file .. "...")
-        vim.fn.jobstart({ config.pdf_viewer, pdf_file }, { detach = true })
+        vim.fn.jobstart({ config.pdf_viewer, pdf_file, '&' }, { detach = true })
     else
         logger.error("File " .. pdf_file .. " does not exist.")
     end
