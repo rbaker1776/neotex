@@ -69,6 +69,7 @@ end
 
 M.preview = function()
     local did_compile = M.compile()
+    print(did_compile)
     if not did_compile then
         return
     end
