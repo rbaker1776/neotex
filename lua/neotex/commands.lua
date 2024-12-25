@@ -76,6 +76,8 @@ M.preview = function()
     end)
 end
 
+M.is_live_compile = false
+
 M.enable_live_compile = function()
     -- autocommand group for live compile
     local group_id = vim.api.nvim_create_augroup("neotex_live_compile", { clear = true })
