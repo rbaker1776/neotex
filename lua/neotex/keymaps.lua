@@ -17,6 +17,10 @@ M.setup = function()
     keymap.set('n', '<leader>lp', function()
         commands.preview()
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
+
+    keymap.set('n', '<leader>ll', function()
+        commands.preview()
+    end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
 end
 
 return M

@@ -76,4 +76,51 @@ M.preview = function()
     end)
 end
 
+M.enable_live_compile = function()
+    -- autocommand group for live compile
+    local group_id = vim.api.nvim_create_augroup("neotex_live_compile", { clear = true })
+
+    vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged" }, {
+        group = group_id,
+        pattern = "*.tex",
+        callback = function()
+            -- debounce logic to prevent overlapping compilations
+            if M.debounce_timer then
+                M.debounce_timer:stop()
+                M.debounce_timer:close()
+            end
+
+            M.debounce_timer = vim.loop.new_timer()
+            M.debounce_timer:start(300, 0, vim.schedule_wrap(function()
+                M.compile(function(did_compile)
+                    --
+                end
+            end))
+        end,
+    })
+
+    M.is_live_compile = true
+    logger.info("Live compilation enabled.")
+end
+
+M.disable_live_compile = function()
+    vim.api.nvim_del_augroup_by_name("neotex_live_compile")
+    if M.debounce_timer then
+        M.debounce_timer:stop()
+        M.debounce_timer:close()
+        M.debounce_timer = nil
+    end
+
+    M.is_live_compile = false
+    logger.info("Live compilation disabled.")
+end
+
+M.toggle_live_compile = function()
+    if not M.is_live_compile then
+        M.enable_live_compile()
+    else
+        M.disable_live_compile()
+    end
+end
+
 return M
