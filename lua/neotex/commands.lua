@@ -55,6 +55,7 @@ M.open_pdf = function()
 
     -- ensure target PDF exists
     if utils.file_exists(pdf_file) then
+        print("(neotex) Opening " .. pdf_file .. '.')
         vim.fn.jobstart({ config.pdf_viewer, pdf_file }, { detach = true })
     else
         print("(neotex) Error: File " .. pdf_file .. " does not exist.")
