@@ -30,28 +30,28 @@ M.compile = function(on_complete)
         stderr_buffered = true,
         on_stdout = function(_, data)
             if data then
-                vim.api.notify(
+                vim.api.nvim_notify(
                     "(neotex) STDOUT: " .. table.concat(data, '\n'),
                 vim.log.levels.INFO, {})
             end
         end,
         on_stderr = function(_, data)
             if data then
-                vim.api.notify(
+                vim.api.nvim_notify(
                     "(neotex) STDERR: " .. table.concat(data, '\n'),
                 vim.log.levels.ERROR, {})
             end
         end,
         on_exit = function(_, code)
             if code == 0 then
-                vim.api.notify(
+                vim.api.nvim_notify(
                     "(neotex) LaTeX compilation successful.",
                 vim.log.levels.INFO, {}) 
                 if on_complete then
                     on_complete(true)
                 end
             else
-                vim.api.notify(
+                vim.api.nvim_notify(
                     "(neotex) Error: LaTeX compilation failed.",
                 vim.log.levels.ERROR, {}) 
                 if on_complete then
@@ -75,12 +75,12 @@ M.open_pdf = function(on_complete)
 
     -- ensure target PDF exists
     if utils.file_exists(pdf_file) then
-        vim.api.notify(
+        vim.api.nvim_notify(
             "(neotex) Opening " .. pdf_file .. "...",
         vim.log.levels.INFO, {})
         vim.fn.jobstart({ config.pdf_viewer, pdf_file }, { detach = true })
     else
-        vim.api.notify(
+        vim.api.nvim_notify(
             "(neotex) Error: File " .. pdf_file .. " does not exist.",
         vim.log.levels.ERROR, {})
     end
