@@ -10,7 +10,7 @@ M.compile = function(on_complete)
     local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
     
     -- ensure we are working with a LaTeX file
-    if not tex_file:match("%.tex$") then
+    if not utils.is_latex_file(tex_file) then
         logger.error("Current file is not a LaTeX file.")
         return
     end
@@ -133,6 +133,10 @@ M.disable_live_compile = function()
 end
 
 M.toggle_live_compile = function()
+    if not utils.is_latex_file(tex_file) then
+        logger.error("Current file is not a LaTeX file.")
+        return
+    end
     if not M.is_live_compile then
         M.enable_live_compile()
     else

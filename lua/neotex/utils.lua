@@ -5,4 +5,9 @@ M.file_exists = function(filepath)
     return stat and stat.type == "file"
 end
 
+M.is_latex_file = function()
+    local file = vim.fn.expand("%:p")
+    return file:match("%.tex$")
+end
+
 return M

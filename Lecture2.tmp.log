@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.24)  25 DEC 2024 15:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.12.24)  25 DEC 2024 15:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -333,20 +333,7 @@ Package hyperref Info: Link coloring ON on input line 38.
 \MPnumerator=\count300
 \makeMPintoPDFobject=\count301
 \everyMPtoPDFconversion=\toks25
-) (./Lecture2.tmp.toc
-
-! Package xcolor Error: Undefined color `b'.
-
-See the xcolor package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.1 ...on}{\numberline {1}Functions}{2}{section.1}
-                                                  %
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-)
+) (./Lecture2.tmp.toc)
 \tf@toc=\write4
 \openout4 = `Lecture2.tmp.toc'.
 
@@ -376,10 +363,10 @@ Package rerunfilecheck Info: File `Lecture2.tmp.out' has not changed.
 (rerunfilecheck)             Checksum: 253691438B23FC672E5E2E6C32F41E26;88.
  ) 
 Here is how much of TeX's memory you used:
- 10592 strings out of 474116
- 160849 string characters out of 5743681
+ 10591 strings out of 474116
+ 160841 string characters out of 5743681
  1934187 words of memory out of 5000000
- 32849 multiletter control sequences out of 15000+600000
+ 32848 multiletter control sequences out of 15000+600000
  563501 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,288b,441s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -387,13 +374,14 @@ Here is how much of TeX's memory you used:
 ></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></
 usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
-r/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/
-local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on Lecture2.tmp.pdf (2 pages, 89453 bytes).
+r/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
+local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
+ocal/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/lo
+cal/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on Lecture2.tmp.pdf (2 pages, 98572 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 66 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  6 named destinations out of 1000 (max. 500000)
  9 words of extra memory for PDF output out of 10000 (max. 10000000)
 
