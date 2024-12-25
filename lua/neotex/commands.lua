@@ -1,5 +1,6 @@
 local config = require("neotex.config")
 local utils = require("neotex.utils")
+local logger = require("neotex.logger")
 
 local M = {}
 
@@ -9,17 +10,13 @@ M.compile = function(on_complete)
     
     -- ensure we are working with a LaTeX file
     if not file:match("%.tex$") then
-        vim.api.nvim_notify(
-            "(neotex) Error: Current file is not a LaTeX file.",
-        vim.log.levels.ERROR, {})
+        logger.error("Current file is not a LaTeX file.")
         return
     end
 
     -- validate the LaTeX command
     if not vim.fn.executable(config.latex_cmd) then
-        vim.api.nvim_notify(
-            "(neotex) Error: LaTeX command '" .. config.latex_cmd .. "' is not executable.",
-        vim.log.levels.ERROR, {})
+        logger.error("LaTeX command '" .. config.latex_cmd .. "' is not executable.")
         return
     end
 
@@ -30,33 +27,23 @@ M.compile = function(on_complete)
         stderr_buffered = true,
         on_stdout = function(_, data)
             if data then
-                vim.api.nvim_notify(
-                    "(neotex) STDOUT: " .. table.concat(data, '\n'),
-                vim.log.levels.INFO, {})
+                logger.debug("STDOUT: " .. table.concat(data, '\n'))
             end
         end,
         on_stderr = function(_, data)
             if data then
-                vim.api.nvim_notify(
-                    "(neotex) STDERR: " .. table.concat(data, '\n'),
-                vim.log.levels.ERROR, {})
+                logger.error("STDERR: " .. table.concat(data, '\n'))
             end
         end,
         on_exit = function(_, code)
-            if code == 0 then
-                vim.api.nvim_notify(
-                    "(neotex) LaTeX compilation successful.",
-                vim.log.levels.INFO, {}) 
-                if on_complete then
-                    on_complete(true)
-                end
+            local success = (code == 0)
+            if success then
+                logger.info("LaTeX compilation successful.")
             else
-                vim.api.nvim_notify(
-                    "(neotex) Error: LaTeX compilation failed.",
-                vim.log.levels.ERROR, {}) 
-                if on_complete then
-                    on_complete(false)
-                end
+                logger.error("LaTeX compilation failed.")
+            end
+            if on_complete then
+                on_complete(success)
             end
         end,
     })
@@ -67,22 +54,16 @@ M.open_pdf = function(on_complete)
 
     -- validate PDF viewer
     if not vim.fn.executable(config.pdf_viewer) then
-        vim.api.nvim_notify(
-            "(neotex) Error: PDF viewer '" .. "' is not found.",
-        vim.log.levels.ERROR, {})
+        logger.error("PDF viewer '" .. "' is not found.")
         return
     end
 
     -- ensure target PDF exists
     if utils.file_exists(pdf_file) then
-        vim.api.nvim_notify(
-            "(neotex) Opening " .. pdf_file .. "...",
-        vim.log.levels.INFO, {})
+        logger.info("Opening " .. pdf_file .. "...")
         vim.fn.jobstart({ config.pdf_viewer, pdf_file }, { detach = true })
     else
-        vim.api.nvim_notify(
-            "(neotex) Error: File " .. pdf_file .. " does not exist.",
-        vim.log.levels.ERROR, {})
+        logger.error("File " .. pdf_file .. " does not exist.")
     end
 end
 

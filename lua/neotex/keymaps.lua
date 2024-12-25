@@ -7,13 +7,7 @@ local keymap = vim.keymap
 M.setup = function()
 
     keymap.set('n', '<leader>lc', function()
-        commands.compile(function(success)
-            if success then
-                print("(neotex) Compilation successful.")
-            else
-                print("(neotex) Error: Compilation failed.")
-            end
-        end)
+        commands.compile()
     end, { noremap = true, silent = true, desc = "Compile LaTeX" })
 
     keymap.set('n', '<leader>lo', function()
