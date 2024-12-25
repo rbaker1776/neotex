@@ -21,6 +21,8 @@ M.compile = function()
 
     local cmd = { config.latex_cmd, "-interaction=nonstopmode", "-synctex=1", file }
 
+    local success = false
+
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
@@ -37,11 +39,14 @@ M.compile = function()
         on_exit = function(_, code)
             if code == 0 then
                 print("(neotex) Compilation successful.")
+                success = true
             else
                 print("(neotex) Error: Compilation failed.")
             end
         end,
     })
+
+    return success
 end
 
 M.open_pdf = function()
@@ -63,7 +68,9 @@ M.open_pdf = function()
 end
 
 M.preview = function()
-    M.compile()
+    if not M.compile() then
+        return
+    end
     vim.defer_fn(function()
         M.open_pdf()
     end, 500) -- 500ms delay to ensure PDF is written
