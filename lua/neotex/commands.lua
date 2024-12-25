@@ -1,4 +1,5 @@
 local config = require("neotex.config")
+local utils = require("neotex.utils")
 
 local M = {}
 
@@ -35,8 +36,7 @@ M.compile = function()
         end,
         on_exit = function(_, code)
             if code == 0 then
-                print("(neotex) Compilation successful. Opening PDF...")
-                M.open_pdf(pdf_file)
+                print("(neotex) Compilation successful.")
             else
                 print("(neotex) Error: Compilation failed.")
             end
@@ -44,14 +44,28 @@ M.compile = function()
     })
 end
 
-M.open_pdf = function(pdf_file)
-    vim.fn.jobstart({ "zathura", pdf_file }, {
-        on_exit = function(_, code)
-            if code ~= 0 then
-                print("(neotex) Error: Failed to open PDF with Zathura.")
-            end
-        end,
-    })
+M.open_pdf = function()
+    local pdf_file = vim.fn.expand("%:p:r") .. ".pdf"
+
+    -- validate PDF viewer
+    if not vim.fn.executable(config.pdf_viewer) then
+        print("(neotex) Error: PDF viewer '" .. "' is not found.")
+        return
+    end
+
+    -- ensure target PDF exists
+    if utils.file_exists(pdf_file) then
+        vim.fn.jobstart({ config.pdf_viewer, pdf_file }, { detach = true })
+    else
+        print("(neotex) Error: File " .. pdf_file .. " does not exist.")
+    end
+end
+
+M.preview = function()
+    M.compile()
+    vim.defer_fn(function()
+        M.open_pdf()
+    end, 500) -- 500ms delay to ensure PDF is written
 end
 
 return M
