@@ -32,13 +32,11 @@ M.compile = function()
             end
         end,
         on_exit = function(_, code)
-            print("done")
-            return
-            --if code == 0 then
-             --   print("(neotex) Compilation successful.")
-            --else
-              --  print("(neotex) Error: Compilation failed.")
-            --end
+            if code == 0 then
+                print("(neotex) Compilation successful.")
+            else
+                print("(neotex) Error: Compilation failed.")
+            end
         end,
     })
 end
