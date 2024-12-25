@@ -164,7 +164,7 @@ M.forward_search = function()
     local cmd = {
         config.pdf_viewer,
         "--synctex-forward",
-        string.format("%d:1:%s", line, tex_file)
+        string.format("%d:1:%s", line, tex_file),
         pdf_file
     }
 
