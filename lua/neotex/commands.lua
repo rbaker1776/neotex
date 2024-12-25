@@ -74,12 +74,21 @@ M.open_pdf = function(on_complete)
     end
 
     -- ensure target PDF exists
-    if utils.file_exists(pdf_file) then
-        logger.info("Opening " .. pdf_file .. "...")
-        vim.fn.jobstart({ config.pdf_viewer, pdf_file, '&' }, { detach = true })
-    else
+    if not utils.file_exists(pdf_file) then
         logger.error("File " .. pdf_file .. " does not exist.")
+        return
     end
+
+    local editor_cmd = string.format("nvim --server %s --remote-send '<ESC>:lua require(\"neotex.commands\").jump_to(%{line}, \"%{input}\")<CR>'", vim.v.servername)
+    local cmd = {
+        config.pdf_viewer,
+        "--synctex-editor-command",
+        editor_cmd,
+        pdf_file
+    }
+
+    logger.info("Opening " .. pdf_file .. "...")
+    vim.fn.jobstart(cmd, { detach = true })
 end
 
 M.preview = function()
@@ -173,6 +182,16 @@ M.forward_search = function()
 
     vim.fn.jobstart(cmd, { detach = true })
     logger.info(string.format("Forward search executed from line %d.", line))
+end
+
+M.jump_to = function(line, file)
+    if not file for file == "" or not utils.file_exists(file) then
+        logger.error("SyncTeX jump file not found.")
+        return
+    end
+    vim.api.nvim_command("edit " .. vim.fn.fnameescape(file))
+    vim.fn.cursor(line, 1)
+    logger.info("Jumped to line " .. line .. '.')
 end
 
 return M
