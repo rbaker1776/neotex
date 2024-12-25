@@ -15,7 +15,7 @@ M.setup = function()
     end, { noremap = true, silent = true, desc = "Open PDF" })
 
     keymap.set('n', '<leader>lp', function()
-        commans.preview()
+        commands.preview()
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
 end
 
