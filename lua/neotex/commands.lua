@@ -145,8 +145,11 @@ M.toggle_live_compile = function()
 end
 
 M.forward_search = function()
+    utils.ensure_dbus() -- ensure D-Bus is running
+
     local tex_file = vim.fn.expand("%:p")
     local line = vim.fn.line('.')
+    local col = vim.fn.col('.')
     local pdf_file = vim.fn.expand("%:p:r") .. ".pdf"
 
     -- ensure the PDF viewer is executable
@@ -164,7 +167,7 @@ M.forward_search = function()
     local cmd = {
         config.pdf_viewer,
         "--synctex-forward",
-        string.format("%d:1:%s", line, tex_file),
+        string.format("%d:%d:%s", line, col, tex_file),
         pdf_file
     }
 
