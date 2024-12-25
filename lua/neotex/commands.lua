@@ -108,7 +108,7 @@ M.enable_live_compile = function()
             end
 
             M.debounce_timer = vim.loop.new_timer()
-            M.debounce_timer:start(300, 0, vim.schedule_wrap(function()
+            M.debounce_timer:start(500, 0, vim.schedule_wrap(function()
                 M.compile(function(did_compile)
                     -- maybe implement logic here
                 end)
