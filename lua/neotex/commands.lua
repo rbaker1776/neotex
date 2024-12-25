@@ -33,12 +33,12 @@ M.compile = function(on_complete)
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = function(_, data)
-            if data then
+            if data and not M.live_compile then
                 logger.debug("STDOUT: " .. table.concat(data, '\n'))
             end
         end,
         on_stderr = function(_, data)
-            if data then
+            if data and not M.live_compile then
                 logger.error("STDERR: " .. table.concat(data, '\n'))
             end
         end,
