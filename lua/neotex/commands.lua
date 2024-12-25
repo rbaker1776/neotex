@@ -69,7 +69,7 @@ M.open_pdf = function(on_complete)
 
     -- validate PDF viewer
     if not vim.fn.executable(config.pdf_viewer) then
-        logger.error("PDF viewer '" .. "' is not found.")
+        logger.error("PDF viewer is not found.")
         return
     end
 
@@ -142,6 +142,34 @@ M.toggle_live_compile = function()
     else
         M.disable_live_compile()
     end
+end
+
+M.forward_search = function()
+    local tex_file = vim.fn.expand("%:p")
+    local line = vim.fn.line('.')
+    local pdf_file = vim.fn.expand("%:p:r") .. ".pdf"
+
+    -- ensure the PDF viewer is executable
+    if not vim.fn.executable(config.pdf_viewer) then
+        logger.error("PDF viewer is not found.")
+        return
+    end
+
+    -- ensure PDF exists
+    if not utils.file_exists(pdf_file) then
+        logger.error("PDF file not found.")
+        return
+    end
+
+    local cmd = {
+        config.pdf_viewer,
+        "--synctex-forward",
+        string.format("%d:1:%s", line, tex_file)
+        pdf_file
+    }
+
+    vim.fn.jobstart(cmd, { detach = true })
+    logger.info(string.format("Forward search executed from line %d.", line))
 end
 
 return M
