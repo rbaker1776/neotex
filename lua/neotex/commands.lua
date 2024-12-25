@@ -185,7 +185,7 @@ M.forward_search = function()
 end
 
 M.jump_to = function(line, file)
-    if not file for file == "" or not utils.file_exists(file) then
+    if not file or file == "" or not utils.file_exists(file) then
         logger.error("SyncTeX jump file not found.")
         return
     end
