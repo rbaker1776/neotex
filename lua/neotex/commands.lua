@@ -5,11 +5,12 @@ local logger = require("neotex.logger")
 local M = {}
 
 M.compile = function(on_complete)
-    local file = vim.fn.expand("%:p")
-    local pdf_file = vim.fn.expand("%:t:r") .. ".pdf"
+    local tex_file = vim.fn.expand("%:p") -- full path to current file
+    local pdf_file = vim.fn.expand("%:t:r") .. ".pdf" -- final PDF
+    local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
     
     -- ensure we are working with a LaTeX file
-    if not file:match("%.tex$") then
+    if not tex_file:match("%.tex$") then
         logger.error("Current file is not a LaTeX file.")
         return
     end
@@ -20,7 +21,13 @@ M.compile = function(on_complete)
         return
     end
 
-    local cmd = { config.latex_cmd, "-interaction=nonstopmode", "-synctex=1", file }
+    local cmd = {
+        config.latex_cmd,
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-jobname=" .. tmp_file,
+        tex_file
+    }
 
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
@@ -36,15 +43,23 @@ M.compile = function(on_complete)
             end
         end,
         on_exit = function(_, code)
-            local success = (code == 0)
-            if success then
-                logger.info("LaTeX compilation successful.")
-            else
+            local out_file = tmp_file .. ".pdf"
+            if code == 0 then -- compilation succeeded
+                if utils.file_exists(out_file) then -- valid output: success path
+                    os.rename(out_file, pdf_file)
+                    logger.info("LaTeX compilation successful.")
+                    if on_complete then on_complete(true) end
+                    return
+                else
+                    logger.error("Temporary PDF not found.")
+                end
+            else -- compilation failed
+                if utils.file_exists(out_file) then
+                    os.remove(out_file)
+                end
                 logger.error("LaTeX compilation failed.")
             end
-            if on_complete then
-                on_complete(success)
-            end
+            if on_complete then on_complete(false) end
         end,
     })
 end
