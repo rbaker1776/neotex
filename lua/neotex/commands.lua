@@ -2,6 +2,7 @@ local config = require("neotex.config")
 local logger = require("neotex.logger")
 local parser = require("neotex.parser")
 local fileman = require("neotex.fileutils")
+local utils = require("neotex.utils")
 
 local M = {}
 
@@ -65,8 +66,8 @@ M.compile = function(on_complete)
 end
 
 -- handle_success() is called after a successful compilation
-local function handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
-    if not fileman.assert_file_exists(tmp_file) then
+local function handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+    if not fileman.assert_file_exists(tmp_pdf) then
         if on_complete then on_complete(false) end
         return
     end
@@ -89,17 +90,19 @@ local function handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_
     end
 
     -- move the temp PDF file to the final PDF file
-    os.rename(tmp_file, pdf_file)
+    os.rename(tmp_pdf, pdf_file)
     logger.info("LaTeX compilation successful.")
     if on_complete then on_complete(true) end
 end
 
 -- handle_failure() is called after a failed compilation
-local function handle_failure(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
-    if not fileman.assert_file_exists(tmp_file) then
+local function handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+    if not fileman.assert_file_exists(tmp_pdf) then
         if on_complete then on_complete(false) end
         return
     end
+
+    os.remove(tmp_pdf)
 
     logger.error("LaTeX compilation failed.")
 
