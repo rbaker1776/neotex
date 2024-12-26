@@ -14,6 +14,7 @@ M.compile = function(on_complete)
     local pdf_file = vim.fn.expand("%:t:r") .. ".pdf" -- final PDF
     local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
     local log_file = vim.fn.expand("%:t:r") .. ".tmp.log"
+    logger.warn("compiling")
     
     -- validate LaTeX file and executable compile command
     if not fileutils.assert_is_tex_file(tex_file) then return end
@@ -41,7 +42,7 @@ M.compile = function(on_complete)
 
     local handle_exit = function(code)
         local tmp_pdf = tmp_file .. ".pdf"
-        logger.warn("Handle exit..")
+        logger.warn("exiting")
         if code == 0 then
             handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
         else
@@ -56,6 +57,8 @@ M.compile = function(on_complete)
         "-jobname=" .. tmp_file,
         tex_file,
     }
+
+    logger.warn("starting")
 
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
