@@ -79,11 +79,9 @@ M.open_pdf = function(on_complete)
         return
     end
 
-    local editor_cmd = string.format(
-        "nvim --server %s --remote-send '<ESC>:lua require(\"neotex.commands\").jump_to(%d, \"%s\")<CR>'",
-        vim.v.servername,
-        '%l',
-        '%f'
+    local editor_command = string.format(
+        "nvim --server %s --remote-send '<ESC>:lua require(\"neotex.commands\").jump_to(%%l, \"%%f\")<CR>'",
+        vim.v.servername
     )
     local cmd = {
         config.pdf_viewer,
