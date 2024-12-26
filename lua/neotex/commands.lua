@@ -92,6 +92,7 @@ M.compile = function(on_complete)
 
     local handle_exit = function(code)
         local tmp_pdf = tmp_file .. ".pdf"
+        print(code)
         if code == 0 then
             handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
         else
@@ -112,9 +113,7 @@ M.compile = function(on_complete)
         stderr_buffered = true,
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
-        on_exit = function(_, code)
-            handle_exit(code)
-        end,
+        on_exit = handle_exit,
     })
 end
 
