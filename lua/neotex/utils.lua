@@ -39,6 +39,4 @@ M.assert_is_tex_file = function(filename)
     return true
 end
 
-M.assert_is_executable
-
 return M
