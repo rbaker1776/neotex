@@ -41,9 +41,9 @@ M.compile = function(on_complete)
     local handle_exit = function(code)
         local tmp_pdf = tmp_file .. ".pdf"
         if code == 0 then
-            handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+            handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
         else
-            handle_failure(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+            handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
         end
     end
 
@@ -95,7 +95,7 @@ local function handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_
 end
 
 -- handle_failure() is called after a failed compilation
-local function handle_failure()
+local function handle_failure(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
     if not fileman.assert_file_exists(tmp_file) then
         if on_complete then on_complete(false) end
         return
