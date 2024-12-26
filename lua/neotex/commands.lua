@@ -97,14 +97,14 @@ end
 
 -- handle_failure() is called after a failed compilation
 local function handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+    logger.error("LaTeX compilation failed.")
+
     if not fileman.assert_file_exists(tmp_pdf) then
         if on_complete then on_complete(false) end
         return
     end
 
     os.remove(tmp_pdf)
-
-    logger.error("LaTeX compilation failed.")
 
     if #stderr_msgs > 0 then
         logger.error("Errors during compilation:")
@@ -113,7 +113,7 @@ local function handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_m
         end
     end
 
-    if on_complete then on_complete(true) end
+    if on_complete then on_complete(false) end
 end
 
 M.open_pdf = function(on_complete)
