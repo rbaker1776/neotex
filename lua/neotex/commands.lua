@@ -6,67 +6,6 @@ local utils = require("neotex.utils")
 
 local M = {}
 
--- M.compile() compiles the current LaTeX file and outputs <filename>.pdf
--- on_complete() is a callback responsible for informing the caller if compilation succeeded
--- M.compile() is responsible for calling the .log file parser in the event of an error
-M.compile = function(on_complete)
-    local tex_file = vim.fn.expand("%:p")
-    local pdf_file = vim.fn.expand("%:t:r") .. ".pdf" -- final PDF
-    local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
-    local log_file = vim.fn.expand("%:t:r") .. ".tmp.log"
-    
-    -- validate LaTeX file and executable compile command
-    if not fileutils.assert_is_tex_file(tex_file) then return end
-    if not fileutils.assert_is_executable(config.latex_cmd) then return end
-
-    -- initialize message storage
-    local stdout_msgs = {}
-    local stderr_msgs = {}
-
-    local handle_stdout = function(data)
-        if data and data ~= "" then
-            local msg = table.concat(data, '\n')
-            --logger.debug("STDOUT: " .. message)
-            table.insert(stdout_msgs, msg)
-        end
-    end
-
-    local handle_stderr = function(data)
-        if data and data ~= "" then
-            local msg = table.concat(data, '\n')
-            --logger.error("STDERR: " .. message)
-            table.insert(stderr_msgs, msg)
-        end
-    end
-
-    local handle_exit = function(code)
-        logger.warn("exiting")
-        os.execute("sleep 2")
-        local tmp_pdf = tmp_file .. ".pdf"
-        if code == 0 then
-            handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
-        else
-            handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
-        end
-    end
-
-    local cmd = {
-        config.latex_cmd,
-        "-interaction=nonstopmode",
-        "-synctex=1",
-        "-jobname=" .. tmp_file,
-        tex_file,
-    }
-
-    vim.fn.jobstart(cmd, {
-        stdout_buffered = true,
-        stderr_buffered = true,
-        on_stdout = handle_stdout,
-        on_stderr = handle_stderr,
-        on_exit = handle_exit,
-    })
-end
-
 -- handle_success() is called after a successful compilation
 local function handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
     if not fileutils.assert_file_exists(tmp_pdf) then
@@ -116,6 +55,65 @@ local function handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_m
     end
 
     if on_complete then on_complete(false) end
+end
+
+-- M.compile() compiles the current LaTeX file and outputs <filename>.pdf
+-- on_complete() is a callback responsible for informing the caller if compilation succeeded
+-- M.compile() is responsible for calling the .log file parser in the event of an error
+M.compile = function(on_complete)
+    local tex_file = vim.fn.expand("%:p")
+    local pdf_file = vim.fn.expand("%:t:r") .. ".pdf" -- final PDF
+    local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
+    local log_file = vim.fn.expand("%:t:r") .. ".tmp.log"
+    
+    -- validate LaTeX file and executable compile command
+    if not fileutils.assert_is_tex_file(tex_file) then return end
+    if not fileutils.assert_is_executable(config.latex_cmd) then return end
+
+    -- initialize message storage
+    local stdout_msgs = {}
+    local stderr_msgs = {}
+
+    local handle_stdout = function(data)
+        if data and data ~= "" then
+            local msg = table.concat(data, '\n')
+            --logger.debug("STDOUT: " .. message)
+            table.insert(stdout_msgs, msg)
+        end
+    end
+
+    local handle_stderr = function(data)
+        if data and data ~= "" then
+            local msg = table.concat(data, '\n')
+            --logger.error("STDERR: " .. message)
+            table.insert(stderr_msgs, msg)
+        end
+    end
+
+    local handle_exit = function(code)
+        local tmp_pdf = tmp_file .. ".pdf"
+        if code == 0 then
+            handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+        else
+            handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+        end
+    end
+
+    local cmd = {
+        config.latex_cmd,
+        "-interaction=nonstopmode",
+        "-synctex=1",
+        "-jobname=" .. tmp_file,
+        tex_file,
+    }
+
+    vim.fn.jobstart(cmd, {
+        stdout_buffered = true,
+        stderr_buffered = true,
+        on_stdout = handle_stdout,
+        on_stderr = handle_stderr,
+        on_exit = handle_exit,
+    })
 end
 
 M.open_pdf = function(on_complete)
