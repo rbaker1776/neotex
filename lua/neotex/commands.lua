@@ -112,7 +112,9 @@ M.compile = function(on_complete)
         stderr_buffered = true,
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
-        on_exit = function(_, code) handle_exit(code) end,
+        on_exit = function(_, code)
+            handle_exit(code)
+        end,
     })
 end
 
