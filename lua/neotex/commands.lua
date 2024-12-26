@@ -79,7 +79,12 @@ M.open_pdf = function(on_complete)
         return
     end
 
-    local editor_cmd = string.format("nvim --server %s --remote-send '<ESC>:lua require(\"neotex.commands\").jump_to(%{line}, \"%{input}\")<CR>'", vim.v.servername)
+    local editor_cmd = string.format(
+        "nvim --server %s --remote-send '<ESC>:lua require(\"neotex.commands\").jump_to(%d, \"%s\")<CR>'",
+        vim.v.servername,
+        '%l',
+        '%f'
+    )
     local cmd = {
         config.pdf_viewer,
         "--synctex-editor-command",
