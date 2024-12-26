@@ -1,7 +1,7 @@
 local config = require("neotex.config")
 local logger = require("neotex.logger")
 local parser = require("neotex.parser")
-local fileutils = require("neotex.fileutils")
+local fileutils = require("neotex.futils")
 local utils = require("neotex.utils")
 
 local M = {}
