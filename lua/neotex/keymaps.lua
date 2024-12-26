@@ -1,4 +1,5 @@
 local commands = require("neotex.commands")
+local compiler = require("neotex.compiler")
 
 local M = {}
 
@@ -7,7 +8,7 @@ local keymap = vim.keymap
 M.setup = function()
 
     keymap.set('n', '<leader>lc', function()
-        commands.compile()
+        compiler.compile(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Compile LaTeX" })
 
     keymap.set('n', '<leader>lo', function()
