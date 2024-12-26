@@ -1,24 +1,50 @@
 local config = require("neotex.config")
-local utils = require("neotex.utils")
 local logger = require("neotex.logger")
+local parser = require("neotex.parser")
+local fileman = require("neotex.fileutils")
 
 local M = {}
 
+-- M.compile() compiles the current LaTeX file and outputs <filename>.pdf
+-- on_complete() is a callback responsible for informing the caller if compilation succeeded
+-- M.compile() is responsible for calling the .log file parser in the event of an error
 M.compile = function(on_complete)
-    local tex_file = vim.fn.expand("%:p") -- full path to current file
+    local tex_file = vim.fn.expand("%:p")
     local pdf_file = vim.fn.expand("%:t:r") .. ".pdf" -- final PDF
     local tmp_file = vim.fn.expand("%:t:r") .. ".tmp" -- temporary PDF
+    local log_file = vim.fn.expand("%:t:r") .. ".tmp.log"
     
-    -- ensure we are working with a LaTeX file
-    if not utils.is_latex_file(tex_file) then
-        logger.error("Current file is not a LaTeX file.")
-        return
+    -- validate LaTeX file and executable compile command
+    if not fileman.assert_is_tex_file(tex_file) then return end
+    if not fileman.assert_is_executable(config.latex_cmd) then return end
+
+    -- initialize message storage
+    local stdout_msgs = {}
+    local stderr_msgs = {}
+
+    local handle_stdout = function(data)
+        if data and data ~= "" then
+            local msg = table.concat(data, '\n')
+            --logger.debug("STDOUT: " .. message)
+            table.insert(stdout_msgs, msg)
+        end
     end
 
-    -- validate the LaTeX command
-    if not vim.fn.executable(config.latex_cmd) then
-        logger.error("LaTeX command '" .. config.latex_cmd .. "' is not executable.")
-        return
+    local handle_stderr = function(data)
+        if data and data ~= "" then
+            local msg = table.concat(data, '\n')
+            --logger.error("STDERR: " .. message)
+            table.insert(stderr_msgs, msg)
+        end
+    end
+
+    local handle_exit = function(code)
+        local tmp_pdf = tmp_file .. ".pdf"
+        if code == 0 then
+            handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+        else
+            handle_failure(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+        end
     end
 
     local cmd = {
@@ -26,52 +52,65 @@ M.compile = function(on_complete)
         "-interaction=nonstopmode",
         "-synctex=1",
         "-jobname=" .. tmp_file,
-        tex_file
+        tex_file,
     }
-
-    local stdout_messages = {}
-    local stderr_messages = {}
 
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
-        on_stdout = function(_, data)
-            if data and data ~= "" and not M.live_compile then
-                local message = table.concat(data, '\n')
-                logger.debug("STDOUT: " .. message)
-                table.insert(stdout_messages, message)
-            end
-        end,
-        on_stderr = function(_, data)
-            if data and data ~= "" and not M.live_compile then
-                local message = table.concat(data, '\n')
-                logger.error("STDERR: " .. message)
-                table.insert(stderr_messages, message)
-            end
-        end,
-        on_exit = function(_, code)
-            local out_file = tmp_file .. ".pdf"
-            if code == 0 then -- compilation succeeded
-                if utils.file_exists(out_file) then -- valid output: success path
-                    os.rename(out_file, pdf_file)
-                    logger.info("LaTeX compilation successful.")
-                    if on_complete then on_complete(true) end
-                    return
-                else
-                    logger.error("Temporary PDF not found.")
-                end
-            else -- compilation failed
-                if utils.file_exists(out_file) then
-                    os.remove(out_file)
-                end
-                logger.error("LaTeX compilation failed.")
-                for _, msg in ipairs(stderr_messages) do
-                    logger.error(msg)
-                end
-            end
-            if on_complete then on_complete(false) end
-        end,
+        on_stdout = handle_stdout,
+        on_stderr = handle_stderr,
+        on_exit = handle_exit,
     })
+end
+
+-- handle_success() is called after a successful compilation
+local function handle_success(tmp_file, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
+    if not fileman.assert_file_exists(tmp_file) then
+        if on_complete then on_complete(false) end
+        return
+    end
+
+    -- no errors because compilation was a success
+    local _, warnings, overfulls = parser.parse_log(log_file)
+
+    if #warnings > 0 then
+        logger.warn("Warnings found:")
+        for _, warning in ipairs(warnings) do
+            logger.warn(warning)
+        end
+    end
+
+    if #overfulls > 0 then
+        logger.warn("Overfull boxed found:")
+        for _, hbox in ipairs(overfulls) do
+            logger.warn(hbox)
+        end
+    end
+
+    -- move the temp PDF file to the final PDF file
+    os.rename(tmp_file, pdf_file)
+    logger.info("LaTeX compilation successful.")
+    if on_complete then on_complete(true) end
+end
+
+-- handle_failure() is called after a failed compilation
+local function handle_failure()
+    if not fileman.assert_file_exists(tmp_file) then
+        if on_complete then on_complete(false) end
+        return
+    end
+
+    logger.error("LaTeX compilation failed.")
+
+    if #stderr_msgs > 0 then
+        logger.error("Errors during compilation:")
+        for _, msg in ipairs(stderr_msgs) do
+            logger.error(msg)
+        end
+    end
+
+    if on_complete then on_complete(true) end
 end
 
 M.open_pdf = function(on_complete)

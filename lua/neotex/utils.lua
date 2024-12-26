@@ -12,6 +12,8 @@ M.is_latex_file = function()
     return file:match("%.tex$")
 end
 
+M.is_executable = function()
+
 M.ensure_dbus = function()
     if not os.getenv("DBUS_SESSION_BUS_ADDRESS") then
         local handle = io.popen("dbus-daemon --session --fork --print-address")
@@ -28,5 +30,15 @@ M.ensure_dbus = function()
         end
     end
 end
+
+M.assert_is_tex_file = function(filename)
+    if not M.is_latex_file(filename) then
+        logger.error("Current file is not a LaTeX file.")
+        return false
+    end
+    return true
+end
+
+M.assert_is_executable
 
 return M
