@@ -29,18 +29,25 @@ M.compile = function(on_complete)
         tex_file
     }
 
+    local stdout_messages = {}
+    local stderr_messages = {}
+
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = function(_, data)
-            --if data and not M.live_compile then
-            --    logger.debug("STDOUT: " .. table.concat(data, '\n'))
-            --end
+            if data and data ~= "" and not M.live_compile then
+                local message = table.concat(data, '\n')
+                logger.debug("STDOUT: " .. message)
+                table.insert(stdout_messages, message)
+            end
         end,
         on_stderr = function(_, data)
-            --if data and not M.live_compile then
-            --    logger.error("STDERR: " .. table.concat(data, '\n'))
-            --end
+            if data and data ~= "" and not M.live_compile then
+                local message = table.concat(data, '\n')
+                logger.error("STDERR: " .. message)
+                table.insert(stderr_messages, message)
+            end
         end,
         on_exit = function(_, code)
             local out_file = tmp_file .. ".pdf"
@@ -58,6 +65,9 @@ M.compile = function(on_complete)
                     os.remove(out_file)
                 end
                 logger.error("LaTeX compilation failed.")
+                for _, msg in ipairs(stderr_messages) do
+                    logger.error(msg)
+                end
             end
             if on_complete then on_complete(false) end
         end,
