@@ -123,7 +123,7 @@ M.open_pdf = function(on_complete)
     end
 
     -- ensure target PDF exists
-    if not utils.file_exists(pdf_file) then
+    if not fileman.file_exists(pdf_file) then
         logger.error("File " .. pdf_file .. " does not exist.")
         return
     end
@@ -194,7 +194,7 @@ M.disable_live_compile = function()
 end
 
 M.toggle_live_compile = function()
-    if not utils.is_latex_file(tex_file) then
+    if not fileman.is_tex_file(tex_file) then
         logger.error("Current file is not a LaTeX file.")
         return
     end
@@ -220,7 +220,7 @@ M.forward_search = function()
     end
 
     -- ensure PDF exists
-    if not utils.file_exists(pdf_file) then
+    if not fileman.file_exists(pdf_file) then
         logger.error("PDF file not found.")
         return
     end
@@ -237,7 +237,7 @@ M.forward_search = function()
 end
 
 M.jump_to = function(line, file)
-    if not file or file == "" or not utils.file_exists(file) then
+    if not file or file == "" or not fileman.file_exists(file) then
         logger.error("SyncTeX jump file not found.")
         return
     end
