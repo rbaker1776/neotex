@@ -1,7 +1,7 @@
 local config = require("neotex.config")
 local logger = require("neotex.logger")
 local parser = require("neotex.parser")
-local fileman = require("neotex.fileutils")
+local fileutils = require("neotex.fileutils")
 local utils = require("neotex.utils")
 
 local M = {}
@@ -16,8 +16,8 @@ M.compile = function(on_complete)
     local log_file = vim.fn.expand("%:t:r") .. ".tmp.log"
     
     -- validate LaTeX file and executable compile command
-    if not fileman.assert_is_tex_file(tex_file) then return end
-    if not fileman.assert_is_executable(config.latex_cmd) then return end
+    if not fileutils.assert_is_tex_file(tex_file) then return end
+    if not fileutils.assert_is_executable(config.latex_cmd) then return end
 
     -- initialize message storage
     local stdout_msgs = {}
@@ -41,6 +41,7 @@ M.compile = function(on_complete)
 
     local handle_exit = function(code)
         local tmp_pdf = tmp_file .. ".pdf"
+        logger.warn("Handle exit..")
         if code == 0 then
             handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
         else
@@ -67,7 +68,7 @@ end
 
 -- handle_success() is called after a successful compilation
 local function handle_success(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
-    if not fileman.assert_file_exists(tmp_pdf) then
+    if not fileutils.assert_file_exists(tmp_pdf) then
         if on_complete then on_complete(false) end
         return
     end
@@ -99,7 +100,7 @@ end
 local function handle_failure(tmp_pdf, pdf_file, log_file, stdout_msgs, stderr_msgs, on_complete)
     logger.error("LaTeX compilation failed.")
 
-    if not fileman.assert_file_exists(tmp_pdf) then
+    if not fileutils.assert_file_exists(tmp_pdf) then
         if on_complete then on_complete(false) end
         return
     end
@@ -126,7 +127,7 @@ M.open_pdf = function(on_complete)
     end
 
     -- ensure target PDF exists
-    if not fileman.file_exists(pdf_file) then
+    if not fileutils.file_exists(pdf_file) then
         logger.error("File " .. pdf_file .. " does not exist.")
         return
     end
@@ -197,7 +198,7 @@ M.disable_live_compile = function()
 end
 
 M.toggle_live_compile = function()
-    if not fileman.is_tex_file(tex_file) then
+    if not fileutils.is_tex_file(tex_file) then
         logger.error("Current file is not a LaTeX file.")
         return
     end
@@ -223,7 +224,7 @@ M.forward_search = function()
     end
 
     -- ensure PDF exists
-    if not fileman.file_exists(pdf_file) then
+    if not fileutils.file_exists(pdf_file) then
         logger.error("PDF file not found.")
         return
     end
@@ -240,7 +241,7 @@ M.forward_search = function()
 end
 
 M.jump_to = function(line, file)
-    if not file or file == "" or not fileman.file_exists(file) then
+    if not file or file == "" or not fileutils.file_exists(file) then
         logger.error("SyncTeX jump file not found.")
         return
     end
