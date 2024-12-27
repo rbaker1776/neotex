@@ -28,9 +28,9 @@ Mapping.setup = function()
         compiler.toggle_liveliness(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
 
-    keymap.set('n', '<leader>lf', function()
-        commands.forward_search()
-    end, { noremap = true, silent = true, desc = "Jump to corresponding point in PDF" })
+    keymap.set('n', '<leader>lj', function()
+        pdfviewer.pdf_jump()
+    end, { noremap = true, silent = true, desc = "From TeX, jump to corresponding point in PDF" })
 end
 
 return Mapping
