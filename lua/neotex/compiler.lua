@@ -99,14 +99,13 @@ Compiler.compile = function(filename)
         filename .. "tex",
     }
 
-    print(filename)
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
         on_exit = function(_, code)
-            print("exiting")
+            print(filename .. ".tex")
             if code == 0 then
                 handle_success(filename)
             else

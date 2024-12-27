@@ -5,7 +5,7 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{amsmath}
 
-\title{This is the title}
+\title{}
 \author{Ryan Baker}
 \date{\today}
 
@@ -19,7 +19,7 @@
 	basicstyle=\ttfamily\footnotesize\color{Black},
 	breakatwhitespace=false,
 	breaklines=true,
-	caption=b,
+	captionpos=b,
 	keepspaces=true,
 	numbers=left,
 	numbersep=5pt,
@@ -28,12 +28,7 @@
 	showtabs=false,
 	tabsize=4,
 }
-\lstset{style=catppuccin}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=Blue,
-}
 
 \begin{document}
 
@@ -51,7 +46,7 @@
 		\item In programming, a function is a reusable block of code
 		\item It (optionally) takes input and (optionally) returns an output
 	\end{itemize}
-	\item Why use function
+	\item Why use functions?
 	\begin{itemize}
 		\item We often want to repeat the same behavior on different pieces of data
 		\item Rather than pasting the same code many times, we use a function
@@ -81,6 +76,7 @@
 	\begin{itemize}
 	\item \textbf{Example}: \texttt{int sum = add(1, 2, 3); // sum = 6}
 	\end{itemize}
+	\lstinputlisting[language=C++]{function.cpp}
 \end{itemize}
 
 \end{document}
