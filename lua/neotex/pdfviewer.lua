@@ -18,7 +18,7 @@ local function pdf_window_to_front(filename)
     local result = handle:read("*a")
     handle:close()
     local cmd = "bring-window-to-top" .. ' ' .. result
-    os.execute(cmd)
+    vim.fn.jobstart(cmd)
 end
 
 
