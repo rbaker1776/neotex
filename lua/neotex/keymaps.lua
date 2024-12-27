@@ -19,6 +19,8 @@ Mapping.setup = function()
 
     keymap.set('n', '<leader>lp', function()
         compiler.compile(vim.fn.expand("%:t:r"))
+        print(compiler._did_compile)
+        print(compiler.did_compile())
         if not compiler.did_compile() then return end
         pdfviewer.open_pdf(vim.fn.expand("%:t:r")) -- only open the PDF if compilation succeeded
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
