@@ -53,8 +53,8 @@ local function handle_success(filename)
 
     -- move the temp PDF file into the filal PDF file
     os.rename(filename .. ".tmp.pdf", filename .. ".pdf")
-    logger.info("LaTeX compilation successful.")
     Compiler._did_compile = true
+    logger.info("LaTeX compilation successful.")
 end
 
 local function handle_failure(filename)

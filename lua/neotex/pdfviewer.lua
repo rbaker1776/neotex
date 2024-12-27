@@ -23,3 +23,5 @@ Viewer.open_pdf = function(filename)
     logger.info("Opening " .. filename .. ".pdf")
     vim.fn.jobstart(cmd, { detach = true })
 end
+
+return Viewer
