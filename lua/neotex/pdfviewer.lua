@@ -44,8 +44,8 @@ end
 
 
 Viewer.pdf_jump = function(filename)
-    if not fuitls.assert_file_exists(filename .. ".pdf") then return end
-    if not fuitls.assert_is_executable("zathura") then return end
+    if not futils.assert_file_exists(filename .. ".pdf") then return end
+    if not futils.assert_is_executable("zathura") then return end
     futils.ensure_dbus()
 
     local line = vim.fn.line('.')
