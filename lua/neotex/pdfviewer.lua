@@ -7,7 +7,7 @@ local Viewer = {}
 
 
 local function pdf_is_open(filename)
-    local handle = io.popen("pgrep -af zathura | grep " .. filename .. ".pdf")
+    local handle = io.popen("pgrep -f \"zathura(.*)" .. filename .. ".pdf\"")
     local result = handle:read("*a")
     handle:close()
     return (result ~= "")
