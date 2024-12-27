@@ -17,19 +17,19 @@ Compiler._debounce_timer = nil
 
 
 local function handle_stdout(data)
-    if data and data ~= "" then
+    --[[if data and data ~= "" then
         local msg = table.concat(data, '\n')
         --logger.debug("STDOUT: " .. message)
         table.insert(Compiler._stdout_msgs, msg)
-    end
+    end--]]
 end
 
 local function handle_stderr(data)
-    if data and data ~= "" then
+    --[[if data and data ~= "" then
         local msg = table.concat(data, '\n')
         --logger.error("STDERR: " .. message)
         table.insert(_stderr_msgs, msg)
-    end
+    end--]]
 end
 
 
