@@ -58,11 +58,13 @@ end
 local function handle_failure(filename)
     logger.error("LaTeX compilation failed.")
 
-    if not futils.assert_file_exists(filename .. ".tmp.pdf") then return end
+    if futils.file_exists(filename .. ".tmp.pdf") then 
+        os.remove(filename .. ".tmp.pdf")
+    end
 
-    os.remove(filename .. ".tmp.pdf")
+    if not futils.assert_file_exists(filename, ".log") then return end
 
-    local errors, _, _ = parser.parse_log(filename .. ".log")
+    local errors, _, _ = parser.parse_log(filename .. ".tmp.log")
 
     if #errors > 0 then
         logger.error("Errors during compilation:")
@@ -84,7 +86,6 @@ Compiler.compile = function(filename)
     if not futils.assert_file_exists(filename .. ".tex") then return end
     if not futils.assert_is_executable("pdflatex") then return end
 
-    print("removing")
     for i, v in ipairs(Compiler._stdout_msgs) do Compiler._stdout_msgs[i] = nil end
     for i, v in ipairs(Compiler._stderr_msgs) do Compiler._stderr_msgs[i] = nil end
 
@@ -96,7 +97,7 @@ Compiler.compile = function(filename)
         "-interaction=nonstopmode",
         "-synctex=1",
         "-jobname-" .. output_tmp,
-        filename .. "tex",
+        filename .. ".tex",
     }
 
     vim.fn.jobstart(cmd, {
@@ -105,7 +106,6 @@ Compiler.compile = function(filename)
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
         on_exit = function(_, code)
-            print(code)
             if code == 0 then
                 handle_success(filename)
             else
