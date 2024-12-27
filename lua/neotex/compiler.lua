@@ -89,7 +89,7 @@ Compiler.did_complete = function()
     return (Compiler._did_complete == true)
 end
 
-Compiler.compile = function(filename)
+Compiler.compile = function(filename, on_complete)
     Compiler._did_compile = false
     Compiler._did_complete = false
 
@@ -100,7 +100,6 @@ Compiler.compile = function(filename)
     for i, v in ipairs(Compiler._stdout_msgs) do Compiler._stdout_msgs[i] = nil end
     for i, v in ipairs(Compiler._stderr_msgs) do Compiler._stderr_msgs[i] = nil end
 
-    local output_pdf = filename .. ".pdf"
     local output_tmp = filename .. ".tmp"
 
     local cmd = {
@@ -122,22 +121,9 @@ Compiler.compile = function(filename)
             else
                 handle_failure(filename)
             end
+            if on_complete then on_complete() end
         end,
     })
-end
-
-Compiler.await_compile = function(filename, on_complete)
-    local co = coroutine.create(function()
-        Compiler.compile(filename)
-
-        while not (compiler.did_complete()) do
-            vim.fn.sleep(25)
-            coroutine.yield()
-        end
-
-        on_complete()
-    end)
-    coroutine.resume(co)
 end
 
 
