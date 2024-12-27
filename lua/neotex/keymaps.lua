@@ -1,22 +1,26 @@
 local commands = require("neotex.commands")
 local compiler = require("neotex.compiler")
+local pdfviewer = require("neotex.pdfviewer")
 
-local M = {}
+
+local Mapping = {}
 
 local keymap = vim.keymap
 
-M.setup = function()
+Mapping.setup = function()
 
     keymap.set('n', '<leader>lc', function()
         compiler.compile(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Compile LaTeX" })
 
     keymap.set('n', '<leader>lo', function()
-        commands.open_pdf()
+        pdfviewer.open_pdf(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Open PDF" })
 
     keymap.set('n', '<leader>lp', function()
-        commands.preview()
+        compiler.compile(vim.fn.expand("%:t:r"))
+        if not compiler.did_compile() then return end
+        pdfviewer.open_pdf(vim.fn.expand("%:t:r")) -- only open the PDF if compilation succeeded
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
 
     keymap.set('n', '<leader>ll', function()
@@ -28,4 +32,4 @@ M.setup = function()
     end, { noremap = true, silent = true, desc = "Jump to corresponding point in PDF" })
 end
 
-return M
+return Mapping
