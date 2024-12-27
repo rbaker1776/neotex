@@ -14,7 +14,10 @@ local function pdf_is_open(filename)
 end
 
 local function pdf_window_to_front(filename)
-    local cmd = string.format("wmctrl -a '%s'", filename .. ".pdf")
+    local handle = io.popen("pgrep -f \"zathura(.*)" .. filename .. ".pdf\"")
+    local result = handle:read("*a")
+    handle:close()
+    local cmd = "bring-window-to-front " .. result
     os.execute(cmd)
 end
 
