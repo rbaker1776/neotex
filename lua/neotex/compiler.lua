@@ -105,7 +105,7 @@ Compiler.compile = function(filename)
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
         on_exit = function(_, code)
-            print(filename .. ".tex")
+            print(code)
             if code == 0 then
                 handle_success(filename)
             else
