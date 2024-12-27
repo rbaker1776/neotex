@@ -43,7 +43,7 @@ Viewer.view_pdf = function(filename)
     if not futils.assert_file_exists(filename .. ".pdf") then return end
     if not futils.assert_is_executable("zathura") then return end
 
-    if not pdf_is_open(filename) then open_pdf(filename) end
+    if not pdf_is_open(filename) then Viewer.open_pdf(filename) end
     pdf_window_to_front(filename)
 end
 
