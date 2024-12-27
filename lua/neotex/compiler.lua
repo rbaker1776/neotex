@@ -96,7 +96,7 @@ Compiler.compile = function(filename)
         "pdflatex",
         "-interaction=nonstopmode",
         "-synctex=1",
-        "-jobname-" .. output_tmp,
+        "-jobname=" .. output_tmp,
         filename .. ".tex",
     }
 
