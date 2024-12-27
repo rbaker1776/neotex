@@ -33,7 +33,8 @@ end
 local function handle_success(filename)
     if not futils.assert_file_exists(filename .. ".tmp.pdf") then return end
 
-    local _, warnings, overfulls = parser.parse_log(filename .. ".log")
+    --[[
+    local _, warnings, overfulls = parser.parse_log(filename .. ".tmp.log")
 
     if #warnings > 0 then
         logger.warn("Warnings found:")
@@ -48,9 +49,10 @@ local function handle_success(filename)
             logger.warn(hbox)
         end
     end
+    --]]
 
     -- move the temp PDF file into the filal PDF file
-    os.rename(tmp_pdf, pdf_file)
+    os.rename(filename .. ".tmp.pdf", filename .. ".pdf")
     logger.info("LaTeX compilation successful.")
     Compiler._did_compile = true
 end
