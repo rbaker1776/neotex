@@ -29,7 +29,7 @@ Mapping.setup = function()
     end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
 
     keymap.set('n', '<leader>lj', function()
-        pdfviewer.pdf_jump()
+        pdfviewer.pdf_jump(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "From TeX, jump to corresponding point in PDF" })
 end
 
