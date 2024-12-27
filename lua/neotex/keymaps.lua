@@ -18,11 +18,10 @@ Mapping.setup = function()
     end, { noremap = true, silent = true, desc = "Open PDF" })
 
     keymap.set('n', '<leader>lp', function()
-        compiler.compile(vim.fn.expand("%:t:r"))
-        print(compiler._did_compile)
-        print(compiler.did_compile())
-        if not compiler.did_compile() then return end
-        pdfviewer.open_pdf(vim.fn.expand("%:t:r")) -- only open the PDF if compilation succeeded
+        compiler.await_compile(vim.fn.expand("%:t:r"), function()
+            if not compiler.did_compile() then return end
+            pdfviewer.open_pdf(vim.fn.expand("%:t:r")) -- only open the PDF if compilation succeeded
+        end)
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
 
     keymap.set('n', '<leader>ll', function()

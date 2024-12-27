@@ -11,6 +11,7 @@ Compiler._stdout_msgs = {}
 Compiler._stderr_msgs = {}
 
 Compiler._did_compile = false
+Compiler._did_complete = false
 
 
 local function handle_stdout(data)
@@ -54,6 +55,7 @@ local function handle_success(filename)
     -- move the temp PDF file into the filal PDF file
     os.rename(filename .. ".tmp.pdf", filename .. ".pdf")
     Compiler._did_compile = true
+    Compiler._did_complete = true
     logger.info("LaTeX compilation successful.")
 end
 
@@ -74,6 +76,8 @@ local function handle_failure(filename)
             logger.error(msg)
         end
     end
+
+    Compiler._did_complete = true
 end
 
 
@@ -81,8 +85,13 @@ Compiler.did_compile = function()
     return (Compiler._did_compile == true)
 end
 
+Compiler.did_complete = function()
+    return (Compiler._did_complete == true)
+end
+
 Compiler.compile = function(filename)
     Compiler._did_compile = false
+    Compiler._did_complete = false
 
     -- validate LaTeX file and executable compile command
     if not futils.assert_file_exists(filename .. ".tex") then return end
@@ -115,6 +124,20 @@ Compiler.compile = function(filename)
             end
         end,
     })
+end
+
+Compiler.await_compile = function(filename, on_complete)
+    local co = coroutine.create(function()
+        Compiler.compile(filename)
+
+        while not (compiler.did_complete()) do
+            vim.fn.sleep(25)
+            coroutine.yield()
+        end
+
+        on_complete()
+    end)
+    coroutine.resume(co)
 end
 
 
