@@ -25,7 +25,7 @@ Mapping.setup = function()
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
 
     keymap.set('n', '<leader>ll', function()
-        commands.toggle_live_compile()
+        commands.toggle_liveliness()
     end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
 
     keymap.set('n', '<leader>lf', function()

@@ -12,6 +12,9 @@ Compiler._stderr_msgs = {}
 
 Compiler._did_compile = false
 
+Compiler._is_live = false
+Compiler._debounce_timer = nil
+
 
 local function handle_stdout(data)
     if data and data ~= "" then
@@ -84,6 +87,11 @@ Compiler.did_compile = function()
     return (Compiler._did_compile == true)
 end
 
+Compiler.is_live = function()
+    return (Compiler._is_live == true)
+end
+
+
 Compiler.compile = function(filename, on_complete)
     Compiler._did_compile = false
     Compiler._did_complete = false
@@ -119,6 +127,54 @@ Compiler.compile = function(filename, on_complete)
             if on_complete then on_complete() end
         end,
     })
+end
+
+
+Compiler.enliven = function()
+    -- autocommand group for live compile
+    local group_id = vim.api.nvim_create_augroup("neotex_enliven", { clear = true })
+
+    vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged" }, {
+        group = group_id,
+        pattern = "*.tex",
+        callback = function()
+            -- debounce logic to prevent overlapping compilations
+            if Compiler._debounce_timer then
+                Compiler._debounce_timer:stop()
+                Compiler._debounce_timer:close()
+            end
+            Compiler._debounce_timer = vim.loop.new_timer()
+            Compiler._debounce_timer:start(500, 0, vim.schedule_wrap(function()
+                Compiler.compile(function()
+                    -- maybe implement logic here
+                end)
+            end))
+        end,
+    })
+
+    Compiler._is_live = true
+    logger.info("Live compilation enabled.")
+end
+
+Compiler.unalive = function()
+    vim.api.nvim_del_augroup_by_name("neotex_enliven")
+    if Compiler._debounce_timer then
+        Compiler._debounce_timer:stop()
+        Compiler._debounce_timer:close()
+        Compiler._debounce_timer = nil
+    end
+
+    Compiler._is_live = false
+    logger.info("Live compilation disabled.")
+end
+
+Compiler.toggle_liveliness = function(filename)
+    if not fileutils.assert_is_tex_file(filename .. ".tex") then return end
+    if not Compiler._is_live then
+        Compiler.enliven()
+    else
+        Compiler.unalive()
+    end
 end
 
 
