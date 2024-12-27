@@ -25,7 +25,7 @@ Mapping.setup = function()
     end, { noremap = true, silent = true, desc = "Compile LaTeX and open PDF" })
 
     keymap.set('n', '<leader>ll', function()
-        compiler.toggle_liveliness()
+        compiler.toggle_liveliness(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Toggle LaTeX live compilaion" })
 
     keymap.set('n', '<leader>lf', function()
