@@ -70,14 +70,14 @@ local function handle_failure(filename)
 
     if not futils.assert_file_exists(filename .. ".tmp.log") then return end
 
-    local errors, _, _ = parser.parse_log(filename .. ".tmp.log")
+    --[[local errors, _, _ = parser.parse_log(filename .. ".tmp.log")
 
     if #errors > 0 then
         logger.error("Errors during compilation:")
         for _, msg in ipairs(errors) do
             logger.error(msg)
         end
-    end
+    end--]]
 
     Compiler._did_complete = true
 end
