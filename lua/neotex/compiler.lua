@@ -96,10 +96,10 @@ Compiler.compile = function(filename)
         "-interaction=nonstopmode",
         "-synctex=1",
         "-jobname-" .. output_tmp,
-        tex_file,
+        filename .. "tex",
     }
 
-    print("starting")
+    print(filename)
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
