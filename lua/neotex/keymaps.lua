@@ -1,4 +1,3 @@
-local commands = require("neotex.commands")
 local compiler = require("neotex.compiler")
 local pdfviewer = require("neotex.pdfviewer")
 
@@ -32,5 +31,6 @@ Mapping.setup = function()
         pdfviewer.pdf_jump(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "From TeX, jump to corresponding point in PDF" })
 end
+
 
 return Mapping

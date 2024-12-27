@@ -1,9 +1,10 @@
 local config = require("neotex.config")
 
-M = {}
-M.__index = M
 
-M.levels =
+Logger = {}
+Logger.__index = Logger
+
+Logger.levels =
 {
     DEBUG = 1,
     INFO = 2,
@@ -11,7 +12,7 @@ M.levels =
     ERROR = 4,
 }
 
-M.log = function(level, message)
+Logger.log = function(level, message)
     if level < config.log_level then
         return
     end
@@ -24,20 +25,21 @@ M.log = function(level, message)
     styles[level], {})
 end
 
-M.error = function(message)
-    M.log(M.levels.ERROR, message)
+Logger.error = function(message)
+    Logger.log(Logger.levels.ERROR, message)
 end
 
-M.warn = function(message)
-    M.log(M.levels.WARN, message)
+Logger.warn = function(message)
+    Logger.log(Logger.levels.WARN, message)
 end
 
-M.info = function(message)
-    M.log(M.levels.INFO, message)
+Logger.info = function(message)
+    Logger.log(Logger.levels.INFO, message)
 end
 
-M.debug = function(message)
-    M.log(M.levels.DEBUG, message)
+Logger.debug = function(message)
+    Logger.log(Logger.levels.DEBUG, message)
 end
 
-return M
+
+return Logger
