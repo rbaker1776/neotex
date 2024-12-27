@@ -17,7 +17,7 @@ local function pdf_window_to_front(filename)
     local handle = io.popen("pgrep -f \"zathura(.*)" .. filename .. ".pdf\"")
     local result = handle:read("*a")
     handle:close()
-    local cmd = "bring-window-to-front " .. result
+    local cmd = "bring-window-to-top" .. result
     os.execute(cmd)
 end
 
