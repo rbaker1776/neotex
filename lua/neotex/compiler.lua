@@ -84,6 +84,7 @@ Compiler.compile = function(filename)
     if not futils.assert_file_exists(filename .. ".tex") then return end
     if not futils.assert_is_executable("pdflatex") then return end
 
+    print("removing")
     for i, v in ipairs(Compiler._stdout_msgs) do Compiler._stdout_msgs[i] = nil end
     for i, v in ipairs(Compiler._stderr_msgs) do Compiler._stderr_msgs[i] = nil end
 
@@ -98,12 +99,14 @@ Compiler.compile = function(filename)
         tex_file,
     }
 
+    print("starting")
     vim.fn.jobstart(cmd, {
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = handle_stdout,
         on_stderr = handle_stderr,
         on_exit = function(_, code)
+            print("exiting")
             if code == 0 then
                 handle_success(filename)
             else
