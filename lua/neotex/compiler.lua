@@ -84,8 +84,8 @@ Compiler.compile = function(filename)
     if not futils.assert_file_exists(filename .. ".tex") then return end
     if not futils.assert_is_executable("pdflatex") then return end
 
-    table.clear(Compiler._stdout_msgs)
-    table.clear(Compiler._stderr_msgs)
+    for i = 0, #Compiler._stdout_msgs do #Compiler._stdout_msgs[i] = nil end
+    for i = 0, #Compiler._stderr_msgs do #Compiler._stderr_msgs[i] = nil end
 
     local output_pdf = filename .. ".pdf"
     local output_tmp = filename .. ".tmp"
