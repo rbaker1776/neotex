@@ -169,7 +169,7 @@ Compiler.unalive = function()
 end
 
 Compiler.toggle_liveliness = function(filename)
-    if not fileutils.assert_is_tex_file(filename .. ".tex") then return end
+    if not futils.assert_is_tex_file(filename .. ".tex") then return end
     if not Compiler._is_live then
         Compiler.enliven()
     else
