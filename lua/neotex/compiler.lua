@@ -11,7 +11,6 @@ Compiler._stdout_msgs = {}
 Compiler._stderr_msgs = {}
 
 Compiler._did_compile = false
-Compiler._did_complete = false
 
 
 local function handle_stdout(data)
@@ -66,7 +65,7 @@ local function handle_failure(filename)
         os.remove(filename .. ".tmp.pdf")
     end
 
-    if not futils.assert_file_exists(filename, ".log") then return end
+    if not futils.assert_file_exists(filename .. ".tmp.log") then return end
 
     local errors, _, _ = parser.parse_log(filename .. ".tmp.log")
 
@@ -83,10 +82,6 @@ end
 
 Compiler.did_compile = function()
     return (Compiler._did_compile == true)
-end
-
-Compiler.did_complete = function()
-    return (Compiler._did_complete == true)
 end
 
 Compiler.compile = function(filename, on_complete)
