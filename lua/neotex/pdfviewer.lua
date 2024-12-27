@@ -13,14 +13,6 @@ local function pdf_is_open(filename)
     return (result ~= "")
 end
 
-local function pdf_window_to_front(filename)
-    local handle = io.popen("pgrep -f \"zathura(.*)" .. filename .. ".pdf\"")
-    local result = handle:read("*a")
-    handle:close()
-    local cmd = "bring-window-to-top" .. ' ' .. result
-    vim.fn.jobstart(cmd)
-end
-
 
 Viewer.open_pdf = function(filename)
     -- verify PDF and PDF viewer
@@ -47,7 +39,7 @@ Viewer.view_pdf = function(filename)
     if not futils.assert_is_executable("zathura") then return end
 
     if not pdf_is_open(filename) then Viewer.open_pdf(filename) end
-    pdf_window_to_front(filename)
+    -- pdf_window_to_front(filename)
 end
 
 
