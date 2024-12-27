@@ -130,7 +130,7 @@ Compiler.compile = function(filename, on_complete)
 end
 
 
-Compiler.enliven = function()
+Compiler.enliven = function(filename)
     -- autocommand group for live compile
     local group_id = vim.api.nvim_create_augroup("neotex_enliven", { clear = true })
 
@@ -145,7 +145,7 @@ Compiler.enliven = function()
             end
             Compiler._debounce_timer = vim.loop.new_timer()
             Compiler._debounce_timer:start(500, 0, vim.schedule_wrap(function()
-                Compiler.compile(function()
+                Compiler.compile(filename, function()
                     -- maybe implement logic here
                 end)
             end))
@@ -171,7 +171,7 @@ end
 Compiler.toggle_liveliness = function(filename)
     if not futils.assert_is_tex_file(filename .. ".tex") then return end
     if not Compiler._is_live then
-        Compiler.enliven()
+        Compiler.enliven(filename)
     else
         Compiler.unalive()
     end
