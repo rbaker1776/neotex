@@ -10,4 +10,14 @@ return {
         t({"", "\\end{"}), f(function(args) return args[1][1] end, {1}),
         t("}"),
     }),
+    s("env", {
+        t("\\begin{"), 
+        i(1, "environment"), -- First input for the environment name
+        t("}"),
+        t({"", '\t'}), 
+        i(0), -- Placeholder for content inside the environment
+        t({"", "\\end{"}), 
+        f(function(args) return args[1][1] end, {1}), -- Dynamically mirrors the first input node
+        t("}"),
+    }),
 }
