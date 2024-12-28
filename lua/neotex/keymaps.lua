@@ -36,16 +36,16 @@ Mapping.setup = function()
     { noremap = true, silent = true })
 
     keymap.set('s', '<Tab>',
-        "v:lua.require'luasnip'.jumpable(1) ? '<Plug>luasnip-jump-next' : '<Tab>'",
-    { expr = true, silent = true })
+        "<cmd>lua require'luasnip'.jump(1)<CR>",
+    { noremap = true, silent = true })
 
     keymap.set('i', '<S-Tab>',
-        "v:lua.require'luasnip'.jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'",
-    { expr = true, silent = true })
+        "<cmd>lua require'luasnip'.jump(-1)<CR>",
+    { noremap = true, silent = true })
 
     keymap.set('s', '<S-Tab>',
-        "v:lua.require'luasnip'.jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'",
-    { expr = true, silent = true })
+        "<cmd>lua require'luasnip'.jump(-1)<CR>",
+    { noremap = true, silent = true })
 end
 
 

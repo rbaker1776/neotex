@@ -7,6 +7,6 @@ return {
     s("env", {
         t("\\begin{"), i(1, "environment"), t("}"),
         t({"", '\t'}), i(0),
-        t({"", "\\end{"}), i(2, "environment"), t("}"),
+        t({"", "\\end{"}), i(1, "environment"), t("}"),
     }),
 }
