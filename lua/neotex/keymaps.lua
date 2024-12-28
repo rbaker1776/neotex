@@ -8,7 +8,6 @@ local Mapping = {}
 local keymap = vim.keymap
 
 Mapping.setup = function()
-
     keymap.set('n', '<leader>lc', function()
         compiler.compile(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "Compile LaTeX" })
@@ -31,6 +30,22 @@ Mapping.setup = function()
     keymap.set('n', '<leader>lj', function()
         pdfviewer.pdf_jump(vim.fn.expand("%:t:r"))
     end, { noremap = true, silent = true, desc = "From TeX, jump to corresponding point in PDF" })
+
+    keymap.set('i', '<Tab>',
+        "v:lua.require'luasnip'.expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'",
+    { expr = true, silent = true })
+
+    keymap.set('s', '<Tab>',
+        "v:lua.require'luasnip'.jumpable(1) ? '<Plug>luasnip-jump-next' : '<Tab>'",
+    { expr = true, silent = true })
+
+    keymap.set('i', '<S-Tab>',
+        "v:lua.require'luasnip'.jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'",
+    { expr = true, silent = true })
+
+    keymap.set('s', '<S-Tab>',
+        "v:lua.require'luasnip'.jumpable(-1) ? '<Plug>luasnip-jump-prev' : '<S-Tab>'",
+    { expr = true, silent = true })
 end
 
 
