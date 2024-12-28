@@ -1,5 +1,6 @@
 local compiler = require("neotex.compiler")
 local pdfviewer = require("neotex.pdfviewer")
+local snippets = require("neotex.snippets")
 
 
 local Mapping = {}
