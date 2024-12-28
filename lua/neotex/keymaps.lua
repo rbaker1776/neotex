@@ -32,7 +32,7 @@ Mapping.setup = function()
     end, { noremap = true, silent = true, desc = "From TeX, jump to corresponding point in PDF" })
 
     keymap.set('i', '<Tab>',
-        "v:lua.require'luasnip'.expand_or_jumpable() and '<Plug>luasnip-expand-or-jump' or '<Tab>'",
+        "<Plug>luasnip-expand-or-jump"
     { expr = true, silent = true })
 
     keymap.set('s', '<Tab>',
